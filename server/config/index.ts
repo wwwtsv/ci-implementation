@@ -15,6 +15,6 @@ export default {
   },
 
   api: {
-    prefix: "/api",
+    prefix: "/",
   },
 };

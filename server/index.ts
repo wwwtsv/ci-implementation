@@ -2,11 +2,17 @@ import express from "express";
 import config from "./config";
 import Logger from "./loaders/logger";
 import Loader from "./loaders";
+import routes from "./api";
+import path from "path";
 
 (async function startServer() {
   const app = express();
 
   await Loader(app);
+
+  app.use(config.api.prefix, routes());
+
+  app.use(express.static(path.resolve("server/public")));
 
   app
     .listen(config.port, () => {
