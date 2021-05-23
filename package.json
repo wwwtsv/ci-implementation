@@ -4,13 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start:agent": "ts-node ./agent/index.ts",
+    "start:agent": "ts-node-dev --respawn --project ./tsconfig.json ./agent/index.ts",
     "start:server": "ts-node-dev --respawn --project ./tsconfig.json ./server/index.ts",
     "eslint": "eslint .",
     "prettier:fix": "prettier --write 'src/**/*.ts'",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Aleksei Tsvetkov",
   "license": "ISC",
   "dependencies": {
     "express": "4.17.1",
