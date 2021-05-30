@@ -9,15 +9,24 @@ import { hideBin } from "yargs/helpers";
 
   const server = http.createServer(app);
 
-  const argv = yargs(hideBin(process.argv)).argv;
+  const argv = yargs(hideBin(process.argv)).option("port", {
+    alias: "p",
+    type: "number",
+    default: 3010,
+  }).argv;
 
-  const port = argv.port || 3001;
+  // https://github.com/yargs/yargs/issues/1953
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  const port = argv.port;
+
+  app.get("/", (req, res) => {
+    res.send("Hello world");
+  });
 
   server
     .listen(port, () => {
-      Logger.info(`
-      🤖 Agent listening on port: 3010
-    `);
+      Logger.info(`🤖 Agent listening on port: ${port}`);
     })
     .on("error", (error) => {
       Logger.error(error);

@@ -24,9 +24,7 @@ import socketInit from "./loaders/socket";
 
   server
     .listen(config.port, () => {
-      Logger.info(`
-      🤖 Server listening on port: ${config.port}
-    `);
+      Logger.info(`🤖 Server listening on port: ${config.port}`);
     })
     .on("error", (error) => {
       Logger.error(error);
