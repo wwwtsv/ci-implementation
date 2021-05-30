@@ -3,6 +3,7 @@ import express from "express";
 import Logger from "./loaders/logger";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
+import socketClientInit from "./loaders/socket-client";
 
 (async function startAgent() {
   const app = express();
@@ -20,9 +21,11 @@ import { hideBin } from "yargs/helpers";
   // @ts-ignore
   const port = argv.port;
 
-  app.get("/", (req, res) => {
-    res.send("Hello world");
+  app.get("/", (_, res) => {
+    res.send("Agent is ready!");
   });
+
+  socketClientInit();
 
   server
     .listen(port, () => {
