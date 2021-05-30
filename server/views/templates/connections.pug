@@ -1,0 +1,14 @@
+.connections
+
+
+script.
+  const connectionsElement = document.querySelector('.connections');
+  const socket = io("ws://localhost:3000")
+  const VIEW_CONNECT = 1;
+  socket.on('connections', (count) => {
+    for (let i = 0; i < count - VIEW_CONNECT; i++) {
+      const connectElement = document.createElement('li');
+      connectElement.textContent = 'connect'
+      connectionsElement.append(connectElement)
+    }
+  })

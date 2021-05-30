@@ -3,11 +3,13 @@ import { Server as HttpServer } from "http";
 import Logger from "./logger";
 
 export default (server: HttpServer): Server => {
-  const io = new Server(server);
+  const IoServer = new Server(server);
 
-  io.on("connection", (socket) => {
-    Logger.info(`Connection count: ${io.engine.clientsCount}`);
+  IoServer.on("connection", () => {
+    const connectionsCount = IoServer.engine.clientsCount;
+    Logger.info(`Connection count: ${connectionsCount}`);
+    IoServer.emit("connections", connectionsCount);
   });
 
-  return io;
+  return IoServer;
 };
