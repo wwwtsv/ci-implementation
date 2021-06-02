@@ -1,14 +1,32 @@
-.connections
+div.p-4.flex.items-center
+  p.text-sm.mr-4 active agents:
+  ul.connections.list-none
 
 
 script.
-  const connectionsElement = document.querySelector('.connections');
-  const socket = io("ws://localhost:3000")
+  const socket = io("ws://localhost:3000");
   const VIEW_CONNECT = 1;
-  socket.on('connections', (count) => {
+  socket.on('client:connect', (count) => {
+    renderConnections(count)
+  });
+
+  socket.on('client:disconnect', () => {
+    removeConnection()
+  })
+
+  const connectionsElement = document.querySelector('.connections');
+
+  function renderConnections(count) {
+    const connectionsElement = document.querySelector('.connections');
+
     for (let i = 0; i < count - VIEW_CONNECT; i++) {
       const connectElement = document.createElement('li');
-      connectElement.textContent = 'connect'
-      connectionsElement.append(connectElement)
+      connectElement.classList = 'bg-green-400 rounded-full w-2 h-2'
+      connectionsElement.append(connectElement);
     }
-  })
+  }
+
+  function removeConnection() {
+    const child = connectionsElement.children[0];
+    connectionsElement.removeChild(child);
+  }
