@@ -2,7 +2,7 @@ import { Server } from "socket.io";
 import { Server as HttpServer } from "http";
 import Logger from "./logger";
 
-export default (server: HttpServer): Server => {
+const IoServer = (server: HttpServer): Server => {
   const IoServer = new Server(server);
 
   IoServer.on("connection", (socket) => {
@@ -18,3 +18,5 @@ export default (server: HttpServer): Server => {
 
   return IoServer;
 };
+
+export default IoServer;

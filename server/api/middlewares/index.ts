@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
+import config from "../../config";
 
 const renderMainPage = (req: Request, res: Response): void => {
-  res.render("index", { title: "Simple CI" });
+  res.render("index", { title: "Simple CI", port: config.port });
 };
 
 export const renderDetailPage = (req: Request, res: Response): void => {
@@ -24,5 +25,7 @@ Process finished with exit code 130 (interrupted by signal 2: SIGINT)
 `,
   });
 };
+
+export const handleBuild = (req: Request, res: Response): void => {};
 
 export default renderMainPage;

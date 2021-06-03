@@ -1,7 +1,7 @@
 import winston from "winston";
 import config from "../config";
 
-const LoggerInstance = winston.createLogger({
+const Logger = winston.createLogger({
   level: config.logs.level,
   levels: winston.config.npm.levels,
   format: winston.format.combine(
@@ -15,4 +15,4 @@ const LoggerInstance = winston.createLogger({
   transports: [new winston.transports.Console()],
 });
 
-export default LoggerInstance;
+export default Logger;

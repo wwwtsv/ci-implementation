@@ -1,10 +1,10 @@
 div.p-4.flex.items-center
-  p.text-sm.mr-4 active agents:
-  ul.connections.list-none
+  p.text-sm.mr-4 active agents 🤖:
+  ul.connections.list-none.flex.gap-1
 
 
 script.
-  const socket = io("ws://localhost:3000");
+  const socket = io('ws://localhost:#{port}');
   const VIEW_CONNECT = 1;
   socket.on('client:connect', (count) => {
     renderConnections(count)
@@ -18,6 +18,7 @@ script.
 
   function renderConnections(count) {
     const connectionsElement = document.querySelector('.connections');
+    connectionsElement.textContent = ''
 
     for (let i = 0; i < count - VIEW_CONNECT; i++) {
       const connectElement = document.createElement('li');

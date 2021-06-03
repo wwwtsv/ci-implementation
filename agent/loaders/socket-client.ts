@@ -1,8 +1,9 @@
 import { io } from "socket.io-client";
 import Logger from "./logger";
+import config from "../config";
 
 export default () => {
-  const socket = io("ws://localhost:3000");
+  const socket = io(`ws://localhost:${config.serverPort}`);
 
   socket.on("connect", () => {
     if (socket.connected) {
