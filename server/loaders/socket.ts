@@ -7,12 +7,15 @@ const IoServer = (server: HttpServer): Server => {
 
   IoServer.on("connection", (socket) => {
     const connectionsCount = IoServer.engine.clientsCount;
-    Logger.info(`Connection count: ${connectionsCount}`);
+    Logger.silly(`Connection count: ${connectionsCount}`);
+
     IoServer.emit("client:connect", connectionsCount);
+
+    socket.join("agents:active");
 
     socket.on("disconnect", (reason) => {
       IoServer.emit("client:disconnect");
-      Logger.info(`Client disconnected reason: ${reason}`);
+      Logger.silly(`Client disconnected reason: ${reason}`);
     });
   });
 

@@ -3,7 +3,9 @@ import path from "path";
 import Logger from "./logger";
 
 const stormDB = (): StormDB => {
-  const engine = new StormDB.localFileEngine(path.resolve("server", "db", "db.stormdb"));
+  const engine = new StormDB.localFileEngine(path.resolve("server", "db", "db.stormdb"), {
+    async: true,
+  });
   const db = new StormDB(engine);
 
   db.default({ builds: [] });

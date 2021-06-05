@@ -1,8 +1,16 @@
 import { Request, Response, Router } from "express";
+import { Server } from "socket.io";
+import StormDB from "stormdb";
+import { BuildFormData } from "../../interfaces";
+import createBuildProcess from "../../services/build";
 
-const build = (app: Router): void => {
+const build = (app: Router, db: StormDB, io: Server): void => {
   app.post("/build", (req: Request, res: Response) => {
-    res.json(req.body);
+    const formData: BuildFormData = req.body;
+
+    const buildId = createBuildProcess(formData, db, io);
+
+    res.redirect(301, `/build/${buildId}`);
   });
 };
 

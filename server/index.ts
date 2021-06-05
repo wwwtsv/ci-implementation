@@ -1,4 +1,4 @@
-import express from "express";
+import express, { NextFunction, Request, Response } from "express";
 import bodyParser from "body-parser";
 import http from "http";
 import path from "path";
@@ -13,19 +13,25 @@ import stormDB from "./loaders/storm-db";
 
   const db = stormDB();
 
+  const server = http.createServer(app);
+  const io = IoServer(server);
+  Logger.info("Create io server instance");
+
+  /* Middlewares */
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use(bodyParser.json());
-  app.use(config.api.prefix, routes());
+  app.use(config.api.prefix, routes(db, io));
   app.use(express.static(path.resolve("server", "public")));
-
-  const server = http.createServer(app);
 
   app.set("views", path.resolve("server", "views"));
   app.set("view engine", "pug");
   Logger.info("Settled view engine");
 
-  IoServer(server);
-  Logger.info("Create socket instance");
+  app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+    Logger.error(err.stack);
+    res.status(500).send("Something broke!");
+    next();
+  });
 
   server
     .listen(config.port, () => {
