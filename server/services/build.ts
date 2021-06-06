@@ -1,15 +1,15 @@
-import { Build, BuildFormData } from "../interfaces";
 import StormDB from "stormdb";
-import uuid from "uuid";
+import { v4 } from "uuid";
 import { Server } from "socket.io";
 import Logger from "../loaders/logger";
+import { Build, BuildFormData } from "@interfaces/index";
 
 const build = (buildFormData: BuildFormData, db: StormDB, io: Server): string => {
-  const { repository, hashCommit, buildCommand } = buildFormData;
+  const { repositoryUrl, hashCommit, buildCommand } = buildFormData;
 
   const buildData: Build = {
-    id: uuid.v4(),
-    repository: repository,
+    id: v4(),
+    repositoryUrl: repositoryUrl,
     commitHash: hashCommit,
     startDate: "",
     endDate: "",
@@ -21,7 +21,16 @@ const build = (buildFormData: BuildFormData, db: StormDB, io: Server): string =>
   db.get("builds").push(buildData);
   db.save();
 
-  io.to("agents:active").emit("agents:build", buildData);
+  io.in("agents:active")
+    .fetchSockets()
+    .then((sockets) => {
+      if (!sockets.length) {
+        return;
+      }
+
+      sockets[0].emit("agents:build", buildData);
+      Logger.info(`Send build data to ${sockets[0].id} agent`);
+    });
 
   return buildData.id;
 };

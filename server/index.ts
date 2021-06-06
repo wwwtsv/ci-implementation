@@ -7,6 +7,7 @@ import Logger from "./loaders/logger";
 import routes from "./api";
 import IoServer from "./loaders/socket";
 import stormDB from "./loaders/storm-db";
+import connections from "./services/connections";
 
 (async function startServer() {
   const app = express();
@@ -15,18 +16,26 @@ import stormDB from "./loaders/storm-db";
 
   const server = http.createServer(app);
   const io = IoServer(server);
-  Logger.info("Create io server instance");
+
+  /* IO Services */
+  io.on("connection", (socket) => {
+    connections(io, socket);
+  });
 
   /* Middlewares */
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use(bodyParser.json());
-  app.use(config.api.prefix, routes(db, io));
   app.use(express.static(path.resolve("server", "public")));
 
+  /* Routes */
+  app.use(config.api.prefix, routes(db, io));
+
+  /* Views */
   app.set("views", path.resolve("server", "views"));
   app.set("view engine", "pug");
   Logger.info("Settled view engine");
 
+  /* Errors handling */
   app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     Logger.error(err.stack);
     res.status(500).send("Something broke!");

@@ -1,6 +1,6 @@
 export interface Build {
   id: string;
-  repository: string;
+  repositoryUrl: string;
   commitHash: string;
   startDate: string;
   endDate: string;
@@ -10,9 +10,7 @@ export interface Build {
 }
 
 export interface BuildFormData {
-  repository: string;
+  repositoryUrl: string;
   hashCommit: string;
   buildCommand: string;
 }
-
-export type Builds = Build[];

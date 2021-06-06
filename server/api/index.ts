@@ -6,7 +6,9 @@ import { Server } from "socket.io";
 
 const routes = (db: StormDB, io: Server): Router => {
   const app = Router();
-  pages(app);
+
+  /* Routes */
+  pages(app, db);
   build(app, db, io);
 
   return app;

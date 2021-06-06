@@ -16,6 +16,7 @@
               th.relative.px-6.py-3(scope='col')
                 span.sr-only Edit
           tbody.bg-white.divide-y.divide-gray-200
+          - for (let x = 0; x < builds.length; x++)
             tr
               td.px-6.py-4.whitespace-nowrap
                 .flex.items-center
@@ -36,4 +37,3 @@
                 | Admin
               td.px-6.py-4.whitespace-nowrap.text-right.text-sm.font-medium
                 a.text-indigo-600(href='#' class='hover:text-indigo-900') Edit
-            // More people...

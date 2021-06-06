@@ -1,19 +1,13 @@
-import { io } from "socket.io-client";
-import Logger from "./logger";
+import { io, Socket } from "socket.io-client";
 import config from "../config";
 
-export default () => {
+const clientSocket = (): Socket => {
   const socket = io(`ws://localhost:${config.serverPort}`);
 
-  socket.on("connect", () => {
-    if (socket.connected) {
-      Logger.info(`Connected to ${socket.id}`);
-    }
-  });
+  /* Join to agents:active room */
+  socket.emit("agents:active");
 
-  socket.on("connect_error", (error) => {
-    Logger.error(error.message);
-  });
-
-  return io;
+  return socket;
 };
+
+export default clientSocket;

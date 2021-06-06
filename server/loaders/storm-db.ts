@@ -8,6 +8,7 @@ const stormDB = (): StormDB => {
   });
   const db = new StormDB(engine);
 
+  db.get("builds").delete();
   db.default({ builds: [] });
   db.save();
 

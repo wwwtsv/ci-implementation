@@ -2,7 +2,6 @@
   "name": "ci-implementation",
   "version": "1.0.0",
   "description": "",
-  "main": "./server/index.ts",
   "scripts": {
     "start:agent": "ts-node-dev --respawn --project ./tsconfig.json ./agent/index.ts",
     "start:server": "ts-node-dev --respawn --project ./tsconfig.json ./server/index.ts",

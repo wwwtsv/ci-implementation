@@ -4,6 +4,8 @@ import Logger from "./loaders/logger";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 import socketClientInit from "./loaders/socket-client";
+import { connect } from "./services/connect";
+import build from "./services/build";
 
 (async function startAgent() {
   const app = express();
@@ -25,7 +27,10 @@ import socketClientInit from "./loaders/socket-client";
     res.send("Agent is ready!");
   });
 
-  socketClientInit();
+  const socket = socketClientInit();
+  /* Socket.io-client services */
+  connect(socket);
+  build(socket);
 
   server
     .listen(port, () => {

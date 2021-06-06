@@ -14,30 +14,20 @@ include templates/document
 
 script.
   const socket = io('ws://localhost:#{port}');
-  const VIEW_CONNECT = 1;
-  socket.on('client:connect', (count) => {
+  socket.emit('views:connections')
+
+  socket.on('views:connections', (count) => {
     renderConnections(count)
   });
-
-  socket.on('client:disconnect', () => {
-    removeConnection()
-  })
-
-  const connectionsElement = document.querySelector('.connections');
 
   function renderConnections(count) {
     const connectionsElement = document.querySelector('.connections');
     connectionsElement.textContent = ''
 
-    for (let i = 0; i < count - VIEW_CONNECT; i++) {
+    for (let i = 0; i < count; i++) {
       const connectElement = document.createElement('li');
       connectElement.classList = 'bg-green-400 rounded-full w-2 h-2'
       connectionsElement.append(connectElement);
     }
-  }
-
-  function removeConnection() {
-    const child = connectionsElement.children[0];
-    connectionsElement.removeChild(child);
   }
 
