@@ -8,6 +8,7 @@ import routes from "./api";
 import IoServer from "./loaders/socket";
 import stormDB from "./loaders/storm-db";
 import connections from "./services/connections";
+import buildsController from "./services/builds-controller";
 
 (async function startServer() {
   const app = express();
@@ -20,6 +21,7 @@ import connections from "./services/connections";
   /* IO Services */
   io.on("connection", (socket) => {
     connections(io, socket);
+    buildsController(io, socket, db);
   });
 
   /* Middlewares */

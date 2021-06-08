@@ -18,16 +18,38 @@ script.
 
   socket.on('views:connections', (count) => {
     renderConnections(count)
+
+    if (count < 1) {
+      disableForm()
+      return;
+    }
+    enableForm()
   });
+  const formElement = document.querySelector('.build-form');
+  const connectionsElement = document.querySelector('.connections');
+
 
   function renderConnections(count) {
-    const connectionsElement = document.querySelector('.connections');
-    connectionsElement.textContent = ''
+    connectionsElement.textContent = '';
+
+    if (count < 1) {
+      connectionsElement.textContent = 'There is not any active agents'
+    }
 
     for (let i = 0; i < count; i++) {
       const connectElement = document.createElement('li');
-      connectElement.classList = 'bg-green-400 rounded-full w-2 h-2'
+      connectElement.classList = 'bg-green-400 rounded-full w-2 h-2';
       connectionsElement.append(connectElement);
     }
+  }
+
+  function disableForm() {
+    formElement.classList.add('pointer-events-none')
+    formElement.classList.add('opacity-50')
+  }
+
+  function enableForm() {
+    formElement.classList.remove('pointer-events-none')
+    formElement.classList.remove('opacity-50')
   }
 

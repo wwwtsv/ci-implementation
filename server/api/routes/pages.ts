@@ -1,16 +1,21 @@
 import { Router } from "express";
 import config from "../../config";
 import StormDB from "stormdb";
+import { Build } from "@interfaces/index";
 
 const pages = (app: Router, db: StormDB): void => {
-  const builds = db.get("builds").value();
-
   app.get("/", (req, res) => {
+    const builds = db.get("builds").value() as Build[];
     res.render("index", { title: "Simple CI", port: config.port, builds: builds });
   });
 
   app.get("/build/:buildId", (req, res) => {
-    res.render("detail");
+    const builds = db.get("builds").value() as Build[];
+
+    const { buildId } = req.params;
+    const build = builds.find((build) => build.id === buildId);
+    console.log(build);
+    res.render("detail", build);
   });
 };
 
