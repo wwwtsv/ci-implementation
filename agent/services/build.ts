@@ -2,6 +2,7 @@ import path from "path";
 import { execSync } from "child_process";
 import { Socket } from "socket.io-client";
 import { Build } from "@interfaces/index";
+import { rmdirSync, mkdirSync } from "fs";
 import agentConfig from "../config";
 import Logger from "../loaders/logger";
 
@@ -10,7 +11,11 @@ const build = (socket: Socket): void => {
     Logger.info(`Agent ${socket.id} get ${JSON.stringify(buildData)} build data`);
     socket.emit("agents:busy");
 
+    rmdirSync(agentConfig.repositoryFolder, { recursive: true });
     Logger.info(`Clear ${agentConfig.repositoryFolder} folder`);
+
+    mkdirSync(agentConfig.repositoryFolder);
+    Logger.info(`Create new ${agentConfig.repositoryFolder} folder`);
 
     const newBuildData = buildData;
     const cwd = agentConfig.repositoryFolder;
@@ -44,6 +49,7 @@ const build = (socket: Socket): void => {
 
     socket.emit("agents:finished", newBuildData);
     socket.emit("agents:active");
+    Logger.info(`Agent ${socket.id} is finished`);
   });
 };
 

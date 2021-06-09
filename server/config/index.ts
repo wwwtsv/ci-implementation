@@ -8,7 +8,7 @@ if (envFound.error) {
   throw new Error("⚠️  Couldn't find .env file  ⚠️");
 }
 
-const config = {
+export const config = {
   port: parseInt(process.env.PORT, 10),
   logs: {
     level: process.env.LOG_LEVEL || "silly",

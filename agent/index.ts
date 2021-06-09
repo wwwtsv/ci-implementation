@@ -1,8 +1,8 @@
 import http from "http";
 import express from "express";
-import Logger from "./loaders/logger";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
+import Logger from "./loaders/logger";
 import socketClientInit from "./loaders/socket-client";
 import { connect } from "./services/connect";
 import build from "./services/build";

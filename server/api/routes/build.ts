@@ -1,8 +1,8 @@
 import { Request, Response, Router } from "express";
 import { Server } from "socket.io";
 import StormDB from "stormdb";
-import createBuildProcess from "../../services/build";
 import { BuildFormData } from "@interfaces/index";
+import createBuildProcess from "../../services/build";
 
 const build = (app: Router, db: StormDB, io: Server): void => {
   app.post("/build", (req: Request, res: Response) => {
