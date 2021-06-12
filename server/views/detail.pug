@@ -2,7 +2,7 @@ include templates/document
 .flex.flex-col
   .-my-2.overflow-x-auto(class='sm:-mx-6 lg:-mx-8')
     .py-2.align-middle.inline-block.min-w-full(class='sm:px-6 lg:px-8')
-      .shadow.overflow-hidden.border-b.border-gray-200(class='sm:rounded-lg')
+      .table-container.shadow.overflow-hidden.border-b.border-gray-200(class='sm:rounded-lg')
         table.min-w-full.divide-y.divide-gray-200
           thead.bg-gray-50
             tr
@@ -20,7 +20,7 @@ include templates/document
                 .flex.items-center
                   div
                     .text-sm.font-medium.text-gray-900
-                      | #{repository}
+                      | #{repositoryUrl}
                     .text-sm.text-gray-500
                       | #{commitHash}
               td.px-6.py-4.whitespace-nowrap
@@ -30,10 +30,63 @@ include templates/document
                 span.px-2.inline-flex.text-xs.leading-5.font-semibold.rounded-full.text-green-800(class=`${status ? 'bg-green-100' : 'bg-red-100'}`)
                   if status
                     | Success
+                  else if status === null
+                    | Progress
                   else
                     | Failure
               td.px-6.py-4.whitespace-nowrap.text-sm.text-gray-500
                 | #{command}
 .grid.w-full.p-4
   code
-    pre= output
+    pre= stdOutput
+
+script.
+  const socket = io('ws://localhost:#{port}');
+  socket.emit('views:detail', '#{build.id}');
+
+  socket.on('views:detail', (buildData) => {
+    const tableContainerElement = document.querySelector('.table-container');
+
+    const statusFailure = `<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full text-green-800 bg-red-100">Failure</span>`;
+    const statusSuccess = `<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full text-green-800 bg-green-100">Success</span>`;
+
+    const buildDetails = `<table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+            <tr>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" scope="col">Repository / commit hash</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" scope="col">Start date / end date</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" scope="col">Status</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" scope="col">Command</th>
+            </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+            <tr>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="flex items-center">
+                        <div>
+                            <div class="text-sm font-medium text-gray-900">${buildData.repositoryUrl}</div>
+                            <div class="text-sm text-gray-500">${buildData.commitHash}</div>
+                        </div>
+                    </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="text-sm text-gray-900">${buildData.startDate}</div>
+                    <div class="text-sm text-gray-500">${buildData.endDate}</div>
+                </td>
+                <td class="build-status px-6 py-4 whitespace-nowrap"></td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${buildData.command}</td>
+            </tr>
+        </tbody>
+    </table>`;
+    tableContainerElement.textContent = '';
+    tableContainerElement.insertAdjacentHTML('beforeend', buildDetails);
+
+    const statusContainerElement = document.querySelector('.build-status');
+    if (buildData.status) {
+      statusContainerElement.insertAdjacentHTML('beforeend', statusSuccess)
+    } else {
+      statusContainerElement.insertAdjacentHTML('beforeend', statusFailure)
+    }
+    const preElement = document.querySelector('pre')
+    preElement.textContent = buildData.stdOutput
+  })

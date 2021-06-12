@@ -40,7 +40,7 @@ import buildsController from "./services/builds-controller";
   /* Errors handling */
   app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     Logger.error(err.stack);
-    res.status(500).send("Something broke!");
+    res.status(500).send(err.stack);
     next();
   });
 

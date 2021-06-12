@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "start:agent": "ts-node-dev --respawn --project ./tsconfig.json ./agent/index.ts",
+    "start:agent": "ts-node-dev --respawn --project ./tsconfig.json --inspect -- ./agent/index.ts",
     "start:server": "ts-node-dev --respawn --project ./tsconfig.json ./server/index.ts",
     "eslint": "eslint .",
     "prettier:fix": "prettier --write 'src/**/*.ts'",

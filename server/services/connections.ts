@@ -31,6 +31,10 @@ const connections = (io: Server, socket: Socket): void => {
     emitActiveAgentsToView(io);
   });
 
+  socket.on("views:detail", (id) => {
+    socket.join(`views:detail-${id}`);
+  });
+
   socket.on("disconnect", (reason) => {
     emitActiveAgentsToView(io);
     Logger.silly(`Client disconnected reason: ${reason}`);

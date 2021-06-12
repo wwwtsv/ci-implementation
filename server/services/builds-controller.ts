@@ -6,6 +6,9 @@ import Logger from "../loaders/logger";
 const buildsController = (io: Server, socket: Socket, db: StormDB): void => {
   socket.on("agents:progress", (buildData: Build) => {
     Logger.info(`Build ${buildData.id} arrived in server builds controller`);
+  });
+
+  socket.on("agents:finished", (buildData) => {
     const builds = db.get("builds").value() as Build[];
 
     const updatedBuilds = builds.map((build) => {
@@ -17,10 +20,7 @@ const buildsController = (io: Server, socket: Socket, db: StormDB): void => {
 
     db.set("builds", updatedBuilds).save();
 
-    io.to(buildData.id).emit("view:buildData", buildData);
-  });
-
-  socket.on("agents:finished", () => {
+    io.to(`views:detail-${buildData.id}`).emit("views:detail", buildData);
     Logger.info(`Agent: ${socket.id} is finished`);
   });
 };

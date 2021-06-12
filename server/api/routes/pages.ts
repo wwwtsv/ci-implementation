@@ -14,7 +14,7 @@ const pages = (app: Router, db: StormDB): void => {
 
     const { buildId } = req.params;
     const build = builds.find((build) => build.id === buildId);
-    res.render("detail", build);
+    res.render("detail", { build, port: config.port });
   });
 };
 
