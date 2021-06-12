@@ -20,25 +20,30 @@ include templates/document
                 .flex.items-center
                   div
                     .text-sm.font-medium.text-gray-900
-                      | #{repositoryUrl}
+                      | #{build.repositoryUrl}
                     .text-sm.text-gray-500
-                      | #{commitHash}
+                      | #{build.commitHash}
               td.px-6.py-4.whitespace-nowrap
-                .text-sm.text-gray-900= startDate
-                .text-sm.text-gray-500= endDate
+                .text-sm.text-gray-900= build.startDate
+                .text-sm.text-gray-500= build.endDate
               td.px-6.py-4.whitespace-nowrap
-                span.px-2.inline-flex.text-xs.leading-5.font-semibold.rounded-full.text-green-800(class=`${status ? 'bg-green-100' : 'bg-red-100'}`)
-                  if status
+                span.px-2.inline-flex.text-xs.leading-5.font-semibold.rounded-full.text-green-800(class=`${build.status ? 'bg-green-100' : 'bg-red-100'}`)
+                  if build.status
                     | Success
-                  else if status === null
+                  else if build.status == null
                     | Progress
                   else
                     | Failure
               td.px-6.py-4.whitespace-nowrap.text-sm.text-gray-500
-                | #{command}
-.grid.w-full.p-4
-  code
-    pre= stdOutput
+                | #{build.command}
+.grid.w-full.p-4.stdOut-container
+  if build.stdOutput
+    code
+      pre= build.stdOutput
+  else
+    .spinner-container
+      div#loading
+
 
 script.
   const socket = io('ws://localhost:#{port}');
@@ -87,6 +92,10 @@ script.
     } else {
       statusContainerElement.insertAdjacentHTML('beforeend', statusFailure)
     }
-    const preElement = document.querySelector('pre')
-    preElement.textContent = buildData.stdOutput
+    const stdOutContainer = document.querySelector('.stdOut-container')
+    const output = `<code>
+                        <pre>${buildData.stdOutput}</pre>
+                    </code>`
+    stdOutContainer.textContent = ''
+    stdOutContainer.insertAdjacentHTML('beforeend', output)
   })

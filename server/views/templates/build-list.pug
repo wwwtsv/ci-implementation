@@ -30,8 +30,10 @@
                 span.px-2.inline-flex.text-xs.leading-5.font-semibold.rounded-full.text-green-800(class=`${build.status ? 'bg-green-100' : 'bg-red-100'}`)
                   if build.status
                     | Success
-                  else if build.status === null
+                  else if build.status == null
                     | Progress
                   else
                     | Failure
               td.px-6.py-4.whitespace-nowrap.text-sm.text-gray-500= build.command
+              td.px-6.py-4.whitespace-nowrap.text-sm.text-gray-500
+                a.text-blue-600(href=`build/${build.id}`) More

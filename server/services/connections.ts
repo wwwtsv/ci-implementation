@@ -37,7 +37,7 @@ const connections = (io: Server, socket: Socket): void => {
 
   socket.on("disconnect", (reason) => {
     emitActiveAgentsToView(io);
-    Logger.silly(`Client disconnected reason: ${reason}`);
+    Logger.error(`Client disconnected reason: ${reason}`);
   });
 };
 
