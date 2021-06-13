@@ -18,7 +18,7 @@ ts-node --project ./tsconfig.json ./agent/index.ts --port="<port number>"
 ### Essentials
 ![](assets/start-page.png)
 
-1. Agents attach and detach server via web sockets automatically
+1. Agents attach and detach to server via web sockets automatically
 2. Server attached agents to rooms active or busy 
    (views connected to view room)
 3. User submits the form (screenshot above)
